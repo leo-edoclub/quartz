@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.daosmzj.screen.mapper.InfoArchivesMapper" >
+  <resultMap id="BaseResultMap" type="com.css.cloud.quartz.zhjc.jsq.entity.InfoArchives" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ARCHIVES_ID" property="archivesId" jdbcType="VARCHAR" />
+    <result column="ARCHIVES_NO" property="archivesNo" jdbcType="VARCHAR" />
+    <result column="ARCHIVES_NAME" property="archivesName" jdbcType="VARCHAR" />
+    <result column="ARCHIVES_TREM" property="archivesTrem" jdbcType="VARCHAR" />
+    <result column="FILING_DATE" property="filingDate" jdbcType="TIMESTAMP" />
+    <result column="CASE_NO" property="caseNo" jdbcType="VARCHAR" />
+    <result column="CASE_NAME" property="caseName" jdbcType="VARCHAR" />
+    <result column="CASEINFO_NO" property="caseinfoNo" jdbcType="VARCHAR" />
+    <result column="ARCHIVES_TITLE" property="archivesTitle" jdbcType="VARCHAR" />
+    <result column="ARCHIVES_SCOPE" property="archivesScope" jdbcType="VARCHAR" />
+    <result column="ARCHIVES_PAGES" property="archivesPages" jdbcType="NUMERIC" />
+    <result column="ARCHIVES_REMARKS" property="archivesRemarks" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ARCHIVES_ID, ARCHIVES_NO, ARCHIVES_NAME, ARCHIVES_TREM, FILING_DATE, CASE_NO, 
+    CASE_NAME, CASEINFO_NO, ARCHIVES_TITLE, ARCHIVES_SCOPE, ARCHIVES_PAGES, ARCHIVES_REMARKS, 
+    CREATETIME, CREATOR, UPDATETIME, UPDATER
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from INFO_ARCHIVES
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from INFO_ARCHIVES
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoArchives" >
+    insert into INFO_ARCHIVES (ID, ARCHIVES_ID, ARCHIVES_NO,
+      ARCHIVES_NAME, ARCHIVES_TREM, FILING_DATE,
+      CASE_NO, CASE_NAME, CASEINFO_NO,
+      ARCHIVES_TITLE, ARCHIVES_SCOPE, ARCHIVES_PAGES,
+      ARCHIVES_REMARKS, CREATETIME, CREATOR,
+      UPDATETIME, UPDATER)
+    values (#{id,jdbcType=VARCHAR}, #{archivesId,jdbcType=VARCHAR}, #{archivesNo,jdbcType=VARCHAR},
+      #{archivesName,jdbcType=VARCHAR}, #{archivesTrem,jdbcType=VARCHAR}, #{filingDate,jdbcType=TIMESTAMP},
+      #{caseNo,jdbcType=VARCHAR}, #{caseName,jdbcType=VARCHAR}, #{caseinfoNo,jdbcType=VARCHAR},
+      #{archivesTitle,jdbcType=VARCHAR}, #{archivesScope,jdbcType=VARCHAR}, #{archivesPages,jdbcType=NUMERIC},
+      #{archivesRemarks,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
+      #{updatetime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoArchives" >
+    insert into INFO_ARCHIVES
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="archivesId != null" >
+        ARCHIVES_ID,
+      </if>
+      <if test="archivesNo != null" >
+        ARCHIVES_NO,
+      </if>
+      <if test="archivesName != null" >
+        ARCHIVES_NAME,
+      </if>
+      <if test="archivesTrem != null" >
+        ARCHIVES_TREM,
+      </if>
+      <if test="filingDate != null" >
+        FILING_DATE,
+      </if>
+      <if test="caseNo != null" >
+        CASE_NO,
+      </if>
+      <if test="caseName != null" >
+        CASE_NAME,
+      </if>
+      <if test="caseinfoNo != null" >
+        CASEINFO_NO,
+      </if>
+      <if test="archivesTitle != null" >
+        ARCHIVES_TITLE,
+      </if>
+      <if test="archivesScope != null" >
+        ARCHIVES_SCOPE,
+      </if>
+      <if test="archivesPages != null" >
+        ARCHIVES_PAGES,
+      </if>
+      <if test="archivesRemarks != null" >
+        ARCHIVES_REMARKS,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="creator != null" >
+        CREATOR,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+      <if test="updater != null" >
+        UPDATER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesId != null" >
+        #{archivesId,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesNo != null" >
+        #{archivesNo,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesName != null" >
+        #{archivesName,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesTrem != null" >
+        #{archivesTrem,jdbcType=VARCHAR},
+      </if>
+      <if test="filingDate != null" >
+        #{filingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseNo != null" >
+        #{caseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="caseName != null" >
+        #{caseName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoNo != null" >
+        #{caseinfoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesTitle != null" >
+        #{archivesTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesScope != null" >
+        #{archivesScope,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesPages != null" >
+        #{archivesPages,jdbcType=NUMERIC},
+      </if>
+      <if test="archivesRemarks != null" >
+        #{archivesRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoArchives" >
+    update INFO_ARCHIVES
+    <set >
+      <if test="archivesId != null" >
+        ARCHIVES_ID = #{archivesId,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesNo != null" >
+        ARCHIVES_NO = #{archivesNo,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesName != null" >
+        ARCHIVES_NAME = #{archivesName,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesTrem != null" >
+        ARCHIVES_TREM = #{archivesTrem,jdbcType=VARCHAR},
+      </if>
+      <if test="filingDate != null" >
+        FILING_DATE = #{filingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseNo != null" >
+        CASE_NO = #{caseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="caseName != null" >
+        CASE_NAME = #{caseName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoNo != null" >
+        CASEINFO_NO = #{caseinfoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesTitle != null" >
+        ARCHIVES_TITLE = #{archivesTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesScope != null" >
+        ARCHIVES_SCOPE = #{archivesScope,jdbcType=VARCHAR},
+      </if>
+      <if test="archivesPages != null" >
+        ARCHIVES_PAGES = #{archivesPages,jdbcType=NUMERIC},
+      </if>
+      <if test="archivesRemarks != null" >
+        ARCHIVES_REMARKS = #{archivesRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        UPDATER = #{updater,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoArchives" >
+    update INFO_ARCHIVES
+    set ARCHIVES_ID = #{archivesId,jdbcType=VARCHAR},
+      ARCHIVES_NO = #{archivesNo,jdbcType=VARCHAR},
+      ARCHIVES_NAME = #{archivesName,jdbcType=VARCHAR},
+      ARCHIVES_TREM = #{archivesTrem,jdbcType=VARCHAR},
+      FILING_DATE = #{filingDate,jdbcType=TIMESTAMP},
+      CASE_NO = #{caseNo,jdbcType=VARCHAR},
+      CASE_NAME = #{caseName,jdbcType=VARCHAR},
+      CASEINFO_NO = #{caseinfoNo,jdbcType=VARCHAR},
+      ARCHIVES_TITLE = #{archivesTitle,jdbcType=VARCHAR},
+      ARCHIVES_SCOPE = #{archivesScope,jdbcType=VARCHAR},
+      ARCHIVES_PAGES = #{archivesPages,jdbcType=NUMERIC},
+      ARCHIVES_REMARKS = #{archivesRemarks,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      UPDATER = #{updater,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

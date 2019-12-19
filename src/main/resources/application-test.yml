@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@10.41.215.16:1521/ORCL
+    username: C##css
+    password: Asdf1234
+    driver-class-name: oracle.jdbc.OracleDriver
+  application:
+    name: quartz
+  redis:
+    host: 10.41.215.131
+    port: 6379
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.css.cloud.quartz.zhjc.jsq.entity
+  configuration:
+    call-setters-on-nulls:  true
+#    map-underscore-to-camel-case:  true  #驼峰映射数据库
+
+server:
+  port: 7777
+
+logging:
+  level:
+    root: info
+    com.css: debug
+  file: /logs/${spring.application.name}.log
+##指挥调度baseurl
+zhdd:
+   url: http://10.41.215.130/gateway/zhdd
+##华为警告
+huawei1: ${zhdd.url}/huawei/getWarn
+huawei2: ${zhdd.url}/huawei/run
+huawei3: ${zhdd.url}/huawei/getTjsj
+huawei4: ${zhdd.url}/huawei/getSb
+huawei5:  ${zhdd.url}/huawei/hostCcqk
+##统一开发平台预警
+tykfpt1: ${zhdd.url}/yjapi/getCsb
+tykfpt2: ${zhdd.url}/yjapi/getTjsj
+##事项库
+sxk: ${zhdd.url}/yjapi/getSxbg
+##办件库
+bjk1: ${zhdd.url}/yjapi/getBjl
+bjk2: ${zhdd.url}/yjapi/getHhp
+##叫号机
+jhj: ${zhdd.url}/yjapi/getJhlpd
+##信息推送
+xxts: ${zzdd.url}/xtsz/xxfb/startTs
+##安全日志
+safelog: ${zhdd.url}/yjsafe/saveYjsafe

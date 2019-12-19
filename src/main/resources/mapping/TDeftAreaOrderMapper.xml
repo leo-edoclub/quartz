@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.TDeftAreaOrderMapper" >
+<select id="readRecorcByJgAndRegin" resultType="java.util.HashMap">
+select * from (
+    select t.dao_type lx,
+    t.dao_name name,
+    t.dao_score score,
+    rank() over(partition by t.dao_type order by t.dao_score desc) rn
+    from DEPT_AREA_ORDER t
+    where to_char(t.dao_end_time, 'yyyy/MM/dd')= #{endTime}
+    and to_char(t.dao_begin_time, 'yyyy/MM/dd')= #{startTime}
+
+    ) order by lx,rn
+</select>
+<insert id="insertByPO" parameterType="java.util.List">
+    insert into DEPT_AREA_ORDER
+                (id, dao_type, dao_org_code, dao_area_code,dao_name,dao_score,dao_begin_time,dao_end_time)
+
+                 <foreach collection ="list" item="reddemCode" index= "index" separator ="UNION ALL">
+                     select
+                    #{reddemCode.id},
+                    #{reddemCode.daoType},
+                    #{reddemCode.daoOrgCode},
+                    #{reddemCode.daoAreaCode},
+                    #{reddemCode.daoName},
+                    #{reddemCode.daoScore},
+                    #{reddemCode.daoBeginTime},
+                    #{reddemCode.daoEndTime}
+                    from dual
+                </foreach >
+</insert>
+<delete id="deleteByWeek">
+    delete from  dept_area_order t where to_char(t.dao_begin_time,'yyyy/MM/dd') = #{startTime} and to_char(t.dao_end_time,'yyyy/MM/dd') = #{endTime}
+</delete>
+</mapper>

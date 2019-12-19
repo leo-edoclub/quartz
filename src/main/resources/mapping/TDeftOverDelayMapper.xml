@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.TDeftOverDelayMapper" >
+  <resultMap id="BaseResultMap" type="com.css.cloud.quartz.zhjc.jsq.entity.TDeftOverDelay" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="DOD_ORG_CODE" property="dodOrgCode" jdbcType="VARCHAR" />
+    <result column="DOD_NAME" property="dodName" jdbcType="VARCHAR" />
+    <result column="DOD_TYPE" property="dodType" jdbcType="CHAR" />
+    <result column="DOD_PERCENT" property="dodPercent" jdbcType="FLOAT" />
+    <result column="DOD_DATE" property="dodDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, DOD_ORG_CODE, DOD_NAME, DOD_TYPE, DOD_PERCENT, DOD_DATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from DEPT_OVER_DELAY
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from DEPT_OVER_DELAY
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TDeftOverDelay" >
+    insert into DEPT_OVER_DELAY (ID, DOD_ORG_CODE, DOD_NAME, 
+      DOD_TYPE, DOD_PERCENT, DOD_DATE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{dodOrgCode,jdbcType=VARCHAR}, #{dodName,jdbcType=VARCHAR}, 
+      #{dodType,jdbcType=CHAR}, #{dodPercent,jdbcType=FLOAT}, #{dodDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TDeftOverDelay" >
+    insert into DEPT_OVER_DELAY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="dodOrgCode != null" >
+        DOD_ORG_CODE,
+      </if>
+      <if test="dodName != null" >
+        DOD_NAME,
+      </if>
+      <if test="dodType != null" >
+        DOD_TYPE,
+      </if>
+      <if test="dodPercent != null" >
+        DOD_PERCENT,
+      </if>
+      <if test="dodDate != null" >
+        DOD_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dodOrgCode != null" >
+        #{dodOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dodName != null" >
+        #{dodName,jdbcType=VARCHAR},
+      </if>
+      <if test="dodType != null" >
+        #{dodType,jdbcType=CHAR},
+      </if>
+      <if test="dodPercent != null" >
+        #{dodPercent,jdbcType=FLOAT},
+      </if>
+      <if test="dodDate != null" >
+        #{dodDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TDeftOverDelay" >
+    update DEPT_OVER_DELAY
+    <set >
+      <if test="dodOrgCode != null" >
+        DOD_ORG_CODE = #{dodOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dodName != null" >
+        DOD_NAME = #{dodName,jdbcType=VARCHAR},
+      </if>
+      <if test="dodType != null" >
+        DOD_TYPE = #{dodType,jdbcType=CHAR},
+      </if>
+      <if test="dodPercent != null" >
+        DOD_PERCENT = #{dodPercent,jdbcType=FLOAT},
+      </if>
+      <if test="dodDate != null" >
+        DOD_DATE = #{dodDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TDeftOverDelay" >
+    update DEPT_OVER_DELAY
+    set DOD_ORG_CODE = #{dodOrgCode,jdbcType=VARCHAR},
+      DOD_NAME = #{dodName,jdbcType=VARCHAR},
+      DOD_TYPE = #{dodType,jdbcType=CHAR},
+      DOD_PERCENT = #{dodPercent,jdbcType=FLOAT},
+      DOD_DATE = #{dodDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

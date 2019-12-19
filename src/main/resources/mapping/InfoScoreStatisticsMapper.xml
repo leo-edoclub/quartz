@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.InfoScoreStatisticsMapper" >
+  <select id="readKhbzDataByDate" resultType="java.util.HashMap">
+  select data.*, e.short_name orgName, rank() over(order by data.total desc) rn
+  from (select #{startTime} || '--' || #{endTime} || '期' rq,
+               (t.no_claim + t.guide_process + t.guide_full + t.guide_exact +
+               t.guide_concord + t.person_register + t.online_report +
+               t.form_join + t.receive_join + t.online_rate +
+               t.line_up_down_num + t.line_up_month_num + t.post_number +
+               t.sso_interface + t.full_cert_list + t.cert_clean_up +
+               t.sumbit_data + t.cert_join + t.point_claim + t.point_solve +
+               t.new_point) total,
+               t.area_code area,
+               t.org_code org,
+               t.no_claim sxslrl_claim,
+               t.guide_process sxbzbz_process,
+               t.guide_full sxbzbz_full,
+               t.guide_exact sxbzbz_exact,
+               t.guide_concord sxbzbz_concord,
+               t.person_register dzzwwwfg_register,
+               t.online_report hlht_report,
+               t.form_join hlht_form,
+               t.receive_join hlht_receive,
+               t.online_rate zxblsd_rate,
+               t.line_up_down_num zxblsd_updown,
+               t.line_up_month_num zxblsd_month,
+               t.post_number zxblsd_post,
+               t.sso_interface sso_interface,
+               t.full_cert_list zzzzk_list,
+               t.cert_clean_up zzzzk_cooperate,
+               t.sumbit_data zzzzk_data,
+               t.cert_join zzzzk_join,
+               t.point_claim qzdd_claim,
+               t.point_solve qzdd_solve,
+               t.new_point qzdd_new,
+               t.ss_type type
+          from score_statistics t
+         where to_char(t.create_date, 'yyyy/MM/dd') &lt; #{endTime} and to_char(t.create_date, 'yyyy/MM/dd') &gt; #{startTime} and t.ss_type='1') data,
+       eb_t_department e
+ where data.org = e.dept_code
+ UNION
+ select data.*, e.short_name orgName, rank() over(order by data.total desc) rn
+  from (select #{startTime} || '--' || #{endTime} || '期' rq,
+               (t.no_claim + t.guide_process + t.guide_full + t.guide_exact +
+               t.guide_concord + t.person_register + t.online_report +
+               t.form_join + t.receive_join + t.online_rate +
+               t.line_up_down_num + t.line_up_month_num + t.post_number +
+               t.sso_interface + t.full_cert_list + t.cert_clean_up +
+               t.sumbit_data + t.cert_join + t.point_claim + t.point_solve +
+               t.new_point) total,
+               t.area_code area,
+               t.org_code org,
+               t.no_claim sxslrl_claim,
+               t.guide_process sxbzbz_process,
+               t.guide_full sxbzbz_full,
+               t.guide_exact sxbzbz_exact,
+               t.guide_concord sxbzbz_concord,
+               t.person_register dzzwwwfg_register,
+               t.online_report hlht_report,
+               t.form_join hlht_form,
+               t.receive_join hlht_receive,
+               t.online_rate zxblsd_rate,
+               t.line_up_down_num zxblsd_updown,
+               t.line_up_month_num zxblsd_month,
+               t.post_number zxblsd_post,
+               t.sso_interface sso_interface,
+               t.full_cert_list zzzzk_list,
+               t.cert_clean_up zzzzk_cooperate,
+               t.sumbit_data zzzzk_data,
+               t.cert_join zzzzk_join,
+               t.point_claim qzdd_claim,
+               t.point_solve qzdd_solve,
+               t.new_point qzdd_new,
+               t.ss_type type
+          from score_statistics t
+         where to_char(t.create_date, 'yyyy/MM/dd') &lt; #{endTime} and to_char(t.create_date, 'yyyy/MM/dd') &gt; #{startTime} and t.ss_type='2') data,
+       eb_t_department e
+ where data.org = e.dept_code
+
+  </select>
+  <select id="readDictByby1" resultType="java.util.HashMap">
+    select * from project_dictionary where by1='PGXM_CHILD'
+  </select>
+  <select id="readDictNamedPGXM" resultType="java.util.HashMap">
+ select * from
+(
+ select
+ case when code=1 then 'sxrl'
+      when code=2 then 'sxbzbz'
+      when code=3 then 'dzzw'
+      when code=4 then 'wsbs'
+      when code=5 then 'zxblsd'
+      when code=6 then 'sso'
+      when code=7 then 'dzzz'
+      else 'qzdd' end code,
+       name,lx
+ from project_dictionary where by1='PGXM'
+)
+  </select>
+<select id="readAllDataByDate" resultType="java.util.HashMap">
+     select
+      e.short_name name,
+      t.org_code org,
+      t.area_code area,
+      t.ss_type  type,
+      t.no_claim  sxrl,
+      (t.guide_process+t.guide_full+t.guide_exact+t.guide_concord) sxbzbz,
+      t.person_register dzzw,
+      (t.online_report+t.form_join+t.receive_join) wsbs,
+      (t.online_rate+t.line_up_down_num+t.line_up_month_num+t.post_number) zxblsd,
+      t.sso_interface  sso,
+      (t.full_cert_list+t.cert_clean_up+t.sumbit_data+t.cert_join) dzzz,
+      (t.point_claim+t.point_solve+t.new_point) qzdd
+
+from score_statistics t left join eb_t_department e
+on t.org_code=e.dept_code
+where  to_char(t.create_date,'yyyy/MM/dd') &lt; #{endTime} and  to_char(t.create_date,'yyyy/MM/dd') &gt; #{beginTime}
+order  by t.org_code
+</select>
+<select id="readDeptAndxqzhByPid" resultType="java.util.HashMap">
+    select dept_code code ,short_name name from eb_t_department where p_id = '4028f3e95f85249f015f8543542e0001' or p_id='4028f3e95f85249f015f854398610003' order by code
+</select>
+<select id="readScoreByOrg"  resultType="com.css.cloud.quartz.zhjc.jsq.entity.TDeftAreaOrder">
+
+select *
+  from (select e.short_name dao_name,
+               e.area_code dao_area_code,
+               e.dept_code dao_org_code,
+               nvl(t.ss_type, '2') dao_type,
+               nvl((t.no_claim + t.guide_process + t.guide_full +
+                   t.guide_exact + t.guide_concord + t.person_register +
+                   t.online_report + t.form_join + t.receive_join +
+                   t.online_rate + t.line_up_down_num + t.line_up_month_num +
+                   t.post_number + t.sso_interface + t.full_cert_list +
+                   t.cert_clean_up + t.sumbit_data + t.cert_join +
+                   t.point_claim + t.point_solve + t.new_point),
+                   0) dao_score
+          from (select *
+                  from score_statistics t
+                 where t.ss_type = '2'
+                   and to_char(t.create_date) &lt; #{endTime}
+                   and to_char(t.create_date, 'yyyy/MM/dd') &gt; #{startTime}) t
+         right join (select ee.dept_code,ee.short_name short_name,ee.area_code
+                      from eb_t_department ee
+                     where ee.p_id = '4028f3e95f85249f015f8543542e0001') e
+            on t.org_code = e.dept_code
+        union
+        select e.short_name dao_name,
+               e.area_code dao_area_code,
+               e.dept_code dao_org_code,
+               nvl(t.ss_type, '1') dao_type,
+               nvl((t.no_claim + t.guide_process + t.guide_full +
+                   t.guide_exact + t.guide_concord + t.person_register +
+                   t.online_report + t.form_join + t.receive_join +
+                   t.online_rate + t.line_up_down_num + t.line_up_month_num +
+                   t.post_number + t.sso_interface + t.full_cert_list +
+                   t.cert_clean_up + t.sumbit_data + t.cert_join +
+                   t.point_claim + t.point_solve + t.new_point),
+                   0) dao_score
+          from (select *
+                  from score_statistics t
+                 where t.ss_type = '1'
+                   and to_char(t.create_date)  &lt; #{endTime}
+                   and to_char(t.create_date, 'yyyy/MM/dd') &gt; #{startTime}) t
+         right join (select ee.dept_code,ee.short_name short_name,ee.area_code
+                      from eb_t_department ee
+                     where ee.p_id = '4028f3e95f85249f015f854398610003') e
+            on t.org_code = e.dept_code)
+ order by dao_score desc
+
+</select>
+<select id="readScoreByType" resultType="java.util.HashMap">
+    select t.ss_type,
+sum(t.no_claim) claim,
+sum(t.guide_process+t.guide_full+t.guide_exact+t.guide_concord) guide,
+sum(t.person_register) dzzw,
+sum(t.online_report+t.form_join+t.receive_join) wsbs,
+sum(t.online_rate+t.line_up_down_num+t.line_up_month_num+t.post_number) zxblsd,
+sum(t.sso_interface) sso,
+sum(t.full_cert_list+t.cert_clean_up+t.sumbit_data+t.cert_join) dzzz,
+sum(t.point_claim+t.point_solve+t.new_point) qzdd
+from (select * from score_statistics t
+where to_char(t.create_date,'yyyy/MM/dd') &gt;#{startTime} and to_char(t.create_date,'yyyy/MM/dd') &lt;#{endTime}) t
+group by t.ss_type
+</select>
+<select id="readWeekData" resultType="java.util.HashMap">
+    select * from (
+    select
+    (t.no_claim + t.guide_process + t.guide_full + t.guide_exact +
+    t.guide_concord + t.person_register + t.online_report +
+    t.form_join + t.receive_join + t.online_rate +
+    t.line_up_down_num + t.line_up_month_num + t.post_number +
+    t.sso_interface + t.full_cert_list + t.cert_clean_up +
+    t.sumbit_data + t.cert_join + t.point_claim + t.point_solve +
+    t.new_point) total,
+    t.area_code area,
+    t.org_code org,
+    t.ss_type type,
+    rank()over(partition by t.org_code order by t.create_date asc) rn
+    from score_statistics t) data where data.rn &lt; 7
+
+</select>
+</mapper>

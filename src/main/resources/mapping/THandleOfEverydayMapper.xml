@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.THandleOfEverydayMapper" >
+  <resultMap id="BaseResultMap" type="com.css.cloud.quartz.zhjc.jsq.entity.THandleOfEveryday" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="DOE_HANDLE_NUM" property="doeHandleNum" jdbcType="NUMERIC" />
+    <result column="DOE_OVER_NUM" property="doeOverNum" jdbcType="NUMERIC" />
+    <result column="DOE_AVG_HANDLE" property="doeAvgHandle" jdbcType="FLOAT" />
+    <result column="DOE_AVG_OVER" property="doeAvgOver" jdbcType="FLOAT" />
+    <result column="DOE_DATE" property="doeDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, DOE_HANDLE_NUM, DOE_OVER_NUM, DOE_AVG_HANDLE, DOE_AVG_OVER, DOE_DATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from HANDLE_OF_EVERYDAY
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="countByDate" resultType="long">
+      select count(1) from HANDLE_OF_EVERYDAY
+    where to_char(DOE_DATE,'yyyyMMdd') = #{date,jdbcType=VARCHAR}
+  </select>
+  <update id="updateByDate" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.THandleOfEveryday">
+    update HANDLE_OF_EVERYDAY
+    set DOE_HANDLE_NUM = #{doeHandleNum,jdbcType=NUMERIC},
+      DOE_OVER_NUM = #{doeOverNum,jdbcType=NUMERIC},
+      DOE_AVG_HANDLE = #{doeAvgHandle,jdbcType=FLOAT},
+      DOE_AVG_OVER = #{doeAvgOver,jdbcType=FLOAT},
+      DOE_DATE = #{doeDate,jdbcType=TIMESTAMP}
+    where to_char(DOE_DATE,'yyyyMMdd') = to_char(#{doeDate,jdbcType=TIMESTAMP},'yyyyMMdd')
+  </update>
+  <select id="getByDate" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from
+    (select
+    <include refid="Base_Column_List" />
+    from HANDLE_OF_EVERYDAY
+    where to_char(DOE_DATE,'yyyyMMdd') = #{today,jdbcType=VARCHAR})
+    where rownum=1
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from HANDLE_OF_EVERYDAY
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.THandleOfEveryday" >
+    insert into HANDLE_OF_EVERYDAY (ID, DOE_HANDLE_NUM, DOE_OVER_NUM, 
+      DOE_AVG_HANDLE, DOE_AVG_OVER, DOE_DATE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{doeHandleNum,jdbcType=NUMERIC}, #{doeOverNum,jdbcType=NUMERIC}, 
+      #{doeAvgHandle,jdbcType=FLOAT}, #{doeAvgOver,jdbcType=FLOAT}, #{doeDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.THandleOfEveryday" >
+    insert into HANDLE_OF_EVERYDAY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="doeHandleNum != null" >
+        DOE_HANDLE_NUM,
+      </if>
+      <if test="doeOverNum != null" >
+        DOE_OVER_NUM,
+      </if>
+      <if test="doeAvgHandle != null" >
+        DOE_AVG_HANDLE,
+      </if>
+      <if test="doeAvgOver != null" >
+        DOE_AVG_OVER,
+      </if>
+      <if test="doeDate != null" >
+        DOE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="doeHandleNum != null" >
+        #{doeHandleNum,jdbcType=NUMERIC},
+      </if>
+      <if test="doeOverNum != null" >
+        #{doeOverNum,jdbcType=NUMERIC},
+      </if>
+      <if test="doeAvgHandle != null" >
+        #{doeAvgHandle,jdbcType=FLOAT},
+      </if>
+      <if test="doeAvgOver != null" >
+        #{doeAvgOver,jdbcType=FLOAT},
+      </if>
+      <if test="doeDate != null" >
+        #{doeDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.THandleOfEveryday" >
+    update HANDLE_OF_EVERYDAY
+    <set >
+      <if test="doeHandleNum != null" >
+        DOE_HANDLE_NUM = #{doeHandleNum,jdbcType=NUMERIC},
+      </if>
+      <if test="doeOverNum != null" >
+        DOE_OVER_NUM = #{doeOverNum,jdbcType=NUMERIC},
+      </if>
+      <if test="doeAvgHandle != null" >
+        DOE_AVG_HANDLE = #{doeAvgHandle,jdbcType=FLOAT},
+      </if>
+      <if test="doeAvgOver != null" >
+        DOE_AVG_OVER = #{doeAvgOver,jdbcType=FLOAT},
+      </if>
+      <if test="doeDate != null" >
+        DOE_DATE = #{doeDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.THandleOfEveryday" >
+    update HANDLE_OF_EVERYDAY
+    set DOE_HANDLE_NUM = #{doeHandleNum,jdbcType=NUMERIC},
+      DOE_OVER_NUM = #{doeOverNum,jdbcType=NUMERIC},
+      DOE_AVG_HANDLE = #{doeAvgHandle,jdbcType=FLOAT},
+      DOE_AVG_OVER = #{doeAvgOver,jdbcType=FLOAT},
+      DOE_DATE = #{doeDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

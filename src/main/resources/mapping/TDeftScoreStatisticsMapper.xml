@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.TDeftScoreStatisticsMapper" >
+  <select id="readRecorcByTime"  resultType="java.util.HashMap">
+select t.dss_project_type  dictType,
+       t.dss_project_score realScore,
+       t.dss_area_dept     bmfl,
+       d.name              score,
+       d.lx                lx
+  from DEPT_SCORE_STATISTICS t, project_dictionary d
+ where d.by1 = 'PGXM'
+   and t.dss_project_type = d.code
+   and to_char(t.dss_begin_time,'yyyy/MM/dd') = #{startTime}
+   and to_char(t.dss_end_time,'yyyy/MM/dd') = #{endTime}
+ order by t.dss_area_dept, t.dss_project_type
+
+  </select>
+  <select id="readDictionaryByPGXM" resultType="java.util.HashMap">
+    select * from project_dictionary where by1='PGXM'
+  </select>
+    <insert id="insertByPO" parameterType="java.util.List">
+        insert into DEPT_SCORE_STATISTICS
+        (id, dss_project_type, dss_project_score, dss_area_dept,dss_begin_time,dss_end_time)
+
+        <foreach collection ="list" item="reddemCode" index= "index" separator ="UNION ALL">
+            select
+            #{reddemCode.id},
+            #{reddemCode.type},
+            #{reddemCode.score},
+            #{reddemCode.deptOrarea},
+            #{reddemCode.startTime},
+            #{reddemCode.endTime}
+            from dual
+        </foreach >
+    </insert>
+</mapper>

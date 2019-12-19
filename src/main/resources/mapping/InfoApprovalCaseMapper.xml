@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.InfoApprovalCaseMapper" >
+  <resultMap id="BaseResultMap" type="com.css.cloud.quartz.zhjc.jsq.entity.InfoApprovalCase" >
+    <id column="CASEINFO_ID" property="caseinfoId" jdbcType="VARCHAR" />
+    <result column="CASEINFO_NO" property="caseinfoNo" jdbcType="VARCHAR" />
+    <result column="CASEINFO_PRONO" property="caseinfoProno" jdbcType="VARCHAR" />
+    <result column="CASEINFO_TITLE" property="caseinfoTitle" jdbcType="VARCHAR" />
+    <result column="CASE_ID" property="caseId" jdbcType="VARCHAR" />
+    <result column="CASE_NAME" property="caseName" jdbcType="VARCHAR" />
+    <result column="CASEINFO_APPLICANTNAME" property="caseinfoApplicantname" jdbcType="VARCHAR" />
+    <result column="CASEINFO_APPLICANTNO" property="caseinfoApplicantno" jdbcType="VARCHAR" />
+    <result column="CASEINFO_APPLICANTTYPE" property="caseinfoApplicanttype" jdbcType="NUMERIC" />
+    <result column="CASEINFO_LEGALPERSON" property="caseinfoLegalperson" jdbcType="VARCHAR" />
+    <result column="CASEINFO_LINKMAN" property="caseinfoLinkman" jdbcType="VARCHAR" />
+    <result column="CASEINFO_LINKMANNO" property="caseinfoLinkmanno" jdbcType="VARCHAR" />
+    <result column="CASEINFO_MOBILE" property="caseinfoMobile" jdbcType="VARCHAR" />
+    <result column="CASEINFO_EMAIL" property="caseinfoEmail" jdbcType="VARCHAR" />
+    <result column="CASEINFO_SAVETIME" property="caseinfoSavetime" jdbcType="TIMESTAMP" />
+    <result column="CASEINFO_SUBMITTIME" property="caseinfoSubmittime" jdbcType="TIMESTAMP" />
+    <result column="APPELLATE_TIME" property="appellateTime" jdbcType="TIMESTAMP" />
+    <result column="CASEINFO_ENDTIME" property="caseinfoEndtime" jdbcType="TIMESTAMP" />
+    <result column="CASEINFO_TIMELIMIT" property="caseinfoTimelimit" jdbcType="NUMERIC" />
+    <result column="CASEINFO_ESTIMATETIME" property="caseinfoEstimatetime" jdbcType="TIMESTAMP" />
+    <result column="CASEINFO_FEEDBACK" property="caseinfoFeedback" jdbcType="VARCHAR" />
+    <result column="CASEINFO_COSTTOLMONEY" property="caseinfoCosttolmoney" jdbcType="NUMERIC" />
+    <result column="CASEINFO_STATE" property="caseinfoState" jdbcType="NUMERIC" />
+    <result column="CASEINFO_ENDTYPE" property="caseinfoEndtype" jdbcType="NUMERIC" />
+    <result column="CASEINFO_STOPTIME" property="caseinfoStoptime" jdbcType="NUMERIC" />
+    <result column="CASEINFO_FROM" property="caseinfoFrom" jdbcType="NUMERIC" />
+    <result column="CASEINFO_RESULTTYPE" property="caseinfoResulttype" jdbcType="NUMERIC" />
+    <result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+    <result column="UNIT_ID" property="unitId" jdbcType="VARCHAR" />
+    <result column="UNIT_NAME" property="unitName" jdbcType="VARCHAR" />
+    <result column="CASEINFO_AREACODE" property="caseinfoAreacode" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CASEINFO_ID, CASEINFO_NO, CASEINFO_PRONO, CASEINFO_TITLE, CASE_ID, CASE_NAME, CASEINFO_APPLICANTNAME, 
+    CASEINFO_APPLICANTNO, CASEINFO_APPLICANTTYPE, CASEINFO_LEGALPERSON, CASEINFO_LINKMAN, 
+    CASEINFO_LINKMANNO, CASEINFO_MOBILE, CASEINFO_EMAIL, CASEINFO_SAVETIME, CASEINFO_SUBMITTIME, 
+    APPELLATE_TIME, CASEINFO_ENDTIME, CASEINFO_TIMELIMIT, CASEINFO_ESTIMATETIME, CASEINFO_FEEDBACK, 
+    CASEINFO_COSTTOLMONEY, CASEINFO_STATE, CASEINFO_ENDTYPE, CASEINFO_STOPTIME, CASEINFO_FROM, 
+    CASEINFO_RESULTTYPE, DEPT_ID, UNIT_ID, UNIT_NAME, CASEINFO_AREACODE, CREATOR, CREATETIME, 
+    UPDATER, UPDATETIME
+  </sql>
+  <select id="getNumByDate" resultType="map" parameterType="java.lang.String">
+  SELECT t1.*,t2.*,t3.*,t4.*,t5.* FROM
+(SELECT count(1)as sum1,nvl(SUM(CASE WHEN to_char(CREATETIME,'yyyyMMdd')=#{date} then 1 else 0 end ),0) as daily1 from APPROVAL_CASEINFO)t1,
+(SELECT count(1)as sum2,nvl(SUM(CASE WHEN to_char(CREATETIME,'yyyyMMdd')=#{date} then 1 else 0 end ),0) as daily2 from INFO_ENTERPRISE)t2,
+(SELECT count(1)as sum3,nvl(SUM(CASE WHEN to_char(CREATETIME,'yyyyMMdd')=#{date} then 1 else 0 end ),0) as daily3 from INFO_PERSON)t3,
+(SELECT count(1)as sum4,nvl(SUM(CASE WHEN to_char(CREATE_TIME,'yyyyMMdd')=#{date} then 1 else 0 end ),0) as daily4 from CERT_BASE)t4,
+(SELECT count(1)as sum5,nvl(SUM(CASE WHEN to_char(CREATETIME,'yyyyMMdd')= #{date} then 1 else 0 end ),0) as daily5 from INFO_ARCHIVES)t5
+  </select>
+<select id="getDailyIncrease" resultType="map" >
+  SELECT count(1)as total,
+   nvl(sum(CASE WHEN CASEINFO_STATE='2' THEN 1 ELSE 0 END),0)as recCase,
+    nvl(sum(CASE WHEN CASEINFO_STATE='4' THEN 1 ELSE 0 END),0)as finCase
+  FROM APPROVAL_CASEINFO WHERE to_char(CREATETIME,'yyyyMMdd')= #{date}
+</select>
+  <select id="getAvgWeekly" resultType="map" >
+    SELECT nvl(avg(nvl(sum(CASE WHEN CASEINFO_STATE='2' THEN 1 ELSE 0 END),0)),0)as avgRecCase,
+    nvl(avg(nvl(sum(CASE WHEN CASEINFO_STATE='4' THEN 1 ELSE 0 END),0)),0)as avgFinCase
+    FROM APPROVAL_CASEINFO WHERE to_char(CREATETIME,'yyyyMMdd')&lt;=#{today} and to_char(CREATETIME,'yyyyMMdd')&gt;#{oldDay}
+    GROUP BY CREATETIME
+  </select>
+  <select id="getAmountBySource" resultType="map" >
+    SELECT count(1)as register,
+    nvl(sum(case when CASEINFO_STATE in (2,3,4) then 1 else 0 end),0)as recipe,
+     nvl(sum(case when CASEINFO_STATE=3 then 1 else 0 end),0)as processing,
+    nvl(sum(case when CASEINFO_STATE=4 then 1 else 0 end),0)as finish
+    from APPROVAL_CASEINFO where CASEINFO_FROM=#{flag} AND CASEINFO_STATE &gt; 0
+  </select>
+
+  <select id="getDepthCase" resultType="map" >
+  SELECT sum(case when t3.is_reserve=1 then 1 else 0 end) as wsb,
+  sum(case when t3.is_reserve=2 then 1 else 0 end) as ycb,
+  sum(case when t3.is_reserve=3 then 1 else 0 end) as dcb
+  FROM APPROVAL_CASEINFO t1
+  LEFT JOIN
+  (
+  SELECT id,code from PROJECT_ITEM WHERE STATE='5' AND STATUS='5'
+  )t2
+  on t1.CASE_ID = t2.CODE
+  LEFT JOIN PROJECT_ITEM_EXT t3 on t2.id = t3.item_id
+  </select>
+
+
+  <select id="getMostItem" resultType="map">
+  SELECT name,ROWNUM as rn from(
+    select COUNT(1)as sort,T1.CASE_ID,T1.CASE_NAME as name FROM APPROVAL_CASEINFO t1
+    GROUP BY T1.CASE_ID,T1.CASE_NAME order by sort desc)
+    where ROWNUM &lt; = 20
+  </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from APPROVAL_CASEINFO
+    where CASEINFO_ID = #{caseinfoId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from APPROVAL_CASEINFO
+    where CASEINFO_ID = #{caseinfoId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoApprovalCase" >
+    insert into APPROVAL_CASEINFO (CASEINFO_ID, CASEINFO_NO, CASEINFO_PRONO, 
+      CASEINFO_TITLE, CASE_ID, CASE_NAME, 
+      CASEINFO_APPLICANTNAME, CASEINFO_APPLICANTNO, 
+      CASEINFO_APPLICANTTYPE, CASEINFO_LEGALPERSON, 
+      CASEINFO_LINKMAN, CASEINFO_LINKMANNO, CASEINFO_MOBILE, 
+      CASEINFO_EMAIL, CASEINFO_SAVETIME, CASEINFO_SUBMITTIME, 
+      APPELLATE_TIME, CASEINFO_ENDTIME, CASEINFO_TIMELIMIT, 
+      CASEINFO_ESTIMATETIME, CASEINFO_FEEDBACK, 
+      CASEINFO_COSTTOLMONEY, CASEINFO_STATE, CASEINFO_ENDTYPE, 
+      CASEINFO_STOPTIME, CASEINFO_FROM, CASEINFO_RESULTTYPE, 
+      DEPT_ID, UNIT_ID, UNIT_NAME, 
+      CASEINFO_AREACODE, CREATOR, CREATETIME, 
+      UPDATER, UPDATETIME)
+    values (#{caseinfoId,jdbcType=VARCHAR}, #{caseinfoNo,jdbcType=VARCHAR}, #{caseinfoProno,jdbcType=VARCHAR}, 
+      #{caseinfoTitle,jdbcType=VARCHAR}, #{caseId,jdbcType=VARCHAR}, #{caseName,jdbcType=VARCHAR}, 
+      #{caseinfoApplicantname,jdbcType=VARCHAR}, #{caseinfoApplicantno,jdbcType=VARCHAR}, 
+      #{caseinfoApplicanttype,jdbcType=NUMERIC}, #{caseinfoLegalperson,jdbcType=VARCHAR}, 
+      #{caseinfoLinkman,jdbcType=VARCHAR}, #{caseinfoLinkmanno,jdbcType=VARCHAR}, #{caseinfoMobile,jdbcType=VARCHAR}, 
+      #{caseinfoEmail,jdbcType=VARCHAR}, #{caseinfoSavetime,jdbcType=TIMESTAMP}, #{caseinfoSubmittime,jdbcType=TIMESTAMP}, 
+      #{appellateTime,jdbcType=TIMESTAMP}, #{caseinfoEndtime,jdbcType=TIMESTAMP}, #{caseinfoTimelimit,jdbcType=NUMERIC}, 
+      #{caseinfoEstimatetime,jdbcType=TIMESTAMP}, #{caseinfoFeedback,jdbcType=VARCHAR}, 
+      #{caseinfoCosttolmoney,jdbcType=NUMERIC}, #{caseinfoState,jdbcType=NUMERIC}, #{caseinfoEndtype,jdbcType=NUMERIC}, 
+      #{caseinfoStoptime,jdbcType=NUMERIC}, #{caseinfoFrom,jdbcType=NUMERIC}, #{caseinfoResulttype,jdbcType=NUMERIC}, 
+      #{deptId,jdbcType=VARCHAR}, #{unitId,jdbcType=VARCHAR}, #{unitName,jdbcType=VARCHAR}, 
+      #{caseinfoAreacode,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoApprovalCase" >
+    insert into APPROVAL_CASEINFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="caseinfoId != null" >
+        CASEINFO_ID,
+      </if>
+      <if test="caseinfoNo != null" >
+        CASEINFO_NO,
+      </if>
+      <if test="caseinfoProno != null" >
+        CASEINFO_PRONO,
+      </if>
+      <if test="caseinfoTitle != null" >
+        CASEINFO_TITLE,
+      </if>
+      <if test="caseId != null" >
+        CASE_ID,
+      </if>
+      <if test="caseName != null" >
+        CASE_NAME,
+      </if>
+      <if test="caseinfoApplicantname != null" >
+        CASEINFO_APPLICANTNAME,
+      </if>
+      <if test="caseinfoApplicantno != null" >
+        CASEINFO_APPLICANTNO,
+      </if>
+      <if test="caseinfoApplicanttype != null" >
+        CASEINFO_APPLICANTTYPE,
+      </if>
+      <if test="caseinfoLegalperson != null" >
+        CASEINFO_LEGALPERSON,
+      </if>
+      <if test="caseinfoLinkman != null" >
+        CASEINFO_LINKMAN,
+      </if>
+      <if test="caseinfoLinkmanno != null" >
+        CASEINFO_LINKMANNO,
+      </if>
+      <if test="caseinfoMobile != null" >
+        CASEINFO_MOBILE,
+      </if>
+      <if test="caseinfoEmail != null" >
+        CASEINFO_EMAIL,
+      </if>
+      <if test="caseinfoSavetime != null" >
+        CASEINFO_SAVETIME,
+      </if>
+      <if test="caseinfoSubmittime != null" >
+        CASEINFO_SUBMITTIME,
+      </if>
+      <if test="appellateTime != null" >
+        APPELLATE_TIME,
+      </if>
+      <if test="caseinfoEndtime != null" >
+        CASEINFO_ENDTIME,
+      </if>
+      <if test="caseinfoTimelimit != null" >
+        CASEINFO_TIMELIMIT,
+      </if>
+      <if test="caseinfoEstimatetime != null" >
+        CASEINFO_ESTIMATETIME,
+      </if>
+      <if test="caseinfoFeedback != null" >
+        CASEINFO_FEEDBACK,
+      </if>
+      <if test="caseinfoCosttolmoney != null" >
+        CASEINFO_COSTTOLMONEY,
+      </if>
+      <if test="caseinfoState != null" >
+        CASEINFO_STATE,
+      </if>
+      <if test="caseinfoEndtype != null" >
+        CASEINFO_ENDTYPE,
+      </if>
+      <if test="caseinfoStoptime != null" >
+        CASEINFO_STOPTIME,
+      </if>
+      <if test="caseinfoFrom != null" >
+        CASEINFO_FROM,
+      </if>
+      <if test="caseinfoResulttype != null" >
+        CASEINFO_RESULTTYPE,
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID,
+      </if>
+      <if test="unitId != null" >
+        UNIT_ID,
+      </if>
+      <if test="unitName != null" >
+        UNIT_NAME,
+      </if>
+      <if test="caseinfoAreacode != null" >
+        CASEINFO_AREACODE,
+      </if>
+      <if test="creator != null" >
+        CREATOR,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="updater != null" >
+        UPDATER,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="caseinfoId != null" >
+        #{caseinfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoNo != null" >
+        #{caseinfoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoProno != null" >
+        #{caseinfoProno,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoTitle != null" >
+        #{caseinfoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="caseId != null" >
+        #{caseId,jdbcType=VARCHAR},
+      </if>
+      <if test="caseName != null" >
+        #{caseName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoApplicantname != null" >
+        #{caseinfoApplicantname,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoApplicantno != null" >
+        #{caseinfoApplicantno,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoApplicanttype != null" >
+        #{caseinfoApplicanttype,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoLegalperson != null" >
+        #{caseinfoLegalperson,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoLinkman != null" >
+        #{caseinfoLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoLinkmanno != null" >
+        #{caseinfoLinkmanno,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoMobile != null" >
+        #{caseinfoMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoEmail != null" >
+        #{caseinfoEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoSavetime != null" >
+        #{caseinfoSavetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoSubmittime != null" >
+        #{caseinfoSubmittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appellateTime != null" >
+        #{appellateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoEndtime != null" >
+        #{caseinfoEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoTimelimit != null" >
+        #{caseinfoTimelimit,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoEstimatetime != null" >
+        #{caseinfoEstimatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoFeedback != null" >
+        #{caseinfoFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoCosttolmoney != null" >
+        #{caseinfoCosttolmoney,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoState != null" >
+        #{caseinfoState,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoEndtype != null" >
+        #{caseinfoEndtype,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoStoptime != null" >
+        #{caseinfoStoptime,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFrom != null" >
+        #{caseinfoFrom,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoResulttype != null" >
+        #{caseinfoResulttype,jdbcType=NUMERIC},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitId != null" >
+        #{unitId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitName != null" >
+        #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoAreacode != null" >
+        #{caseinfoAreacode,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoApprovalCase" >
+    update APPROVAL_CASEINFO
+    <set >
+      <if test="caseinfoNo != null" >
+        CASEINFO_NO = #{caseinfoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoProno != null" >
+        CASEINFO_PRONO = #{caseinfoProno,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoTitle != null" >
+        CASEINFO_TITLE = #{caseinfoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="caseId != null" >
+        CASE_ID = #{caseId,jdbcType=VARCHAR},
+      </if>
+      <if test="caseName != null" >
+        CASE_NAME = #{caseName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoApplicantname != null" >
+        CASEINFO_APPLICANTNAME = #{caseinfoApplicantname,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoApplicantno != null" >
+        CASEINFO_APPLICANTNO = #{caseinfoApplicantno,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoApplicanttype != null" >
+        CASEINFO_APPLICANTTYPE = #{caseinfoApplicanttype,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoLegalperson != null" >
+        CASEINFO_LEGALPERSON = #{caseinfoLegalperson,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoLinkman != null" >
+        CASEINFO_LINKMAN = #{caseinfoLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoLinkmanno != null" >
+        CASEINFO_LINKMANNO = #{caseinfoLinkmanno,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoMobile != null" >
+        CASEINFO_MOBILE = #{caseinfoMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoEmail != null" >
+        CASEINFO_EMAIL = #{caseinfoEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoSavetime != null" >
+        CASEINFO_SAVETIME = #{caseinfoSavetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoSubmittime != null" >
+        CASEINFO_SUBMITTIME = #{caseinfoSubmittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appellateTime != null" >
+        APPELLATE_TIME = #{appellateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoEndtime != null" >
+        CASEINFO_ENDTIME = #{caseinfoEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoTimelimit != null" >
+        CASEINFO_TIMELIMIT = #{caseinfoTimelimit,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoEstimatetime != null" >
+        CASEINFO_ESTIMATETIME = #{caseinfoEstimatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoFeedback != null" >
+        CASEINFO_FEEDBACK = #{caseinfoFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoCosttolmoney != null" >
+        CASEINFO_COSTTOLMONEY = #{caseinfoCosttolmoney,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoState != null" >
+        CASEINFO_STATE = #{caseinfoState,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoEndtype != null" >
+        CASEINFO_ENDTYPE = #{caseinfoEndtype,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoStoptime != null" >
+        CASEINFO_STOPTIME = #{caseinfoStoptime,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFrom != null" >
+        CASEINFO_FROM = #{caseinfoFrom,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoResulttype != null" >
+        CASEINFO_RESULTTYPE = #{caseinfoResulttype,jdbcType=NUMERIC},
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitId != null" >
+        UNIT_ID = #{unitId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitName != null" >
+        UNIT_NAME = #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoAreacode != null" >
+        CASEINFO_AREACODE = #{caseinfoAreacode,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        UPDATER = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where CASEINFO_ID = #{caseinfoId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.InfoApprovalCase" >
+    update APPROVAL_CASEINFO
+    set CASEINFO_NO = #{caseinfoNo,jdbcType=VARCHAR},
+      CASEINFO_PRONO = #{caseinfoProno,jdbcType=VARCHAR},
+      CASEINFO_TITLE = #{caseinfoTitle,jdbcType=VARCHAR},
+      CASE_ID = #{caseId,jdbcType=VARCHAR},
+      CASE_NAME = #{caseName,jdbcType=VARCHAR},
+      CASEINFO_APPLICANTNAME = #{caseinfoApplicantname,jdbcType=VARCHAR},
+      CASEINFO_APPLICANTNO = #{caseinfoApplicantno,jdbcType=VARCHAR},
+      CASEINFO_APPLICANTTYPE = #{caseinfoApplicanttype,jdbcType=NUMERIC},
+      CASEINFO_LEGALPERSON = #{caseinfoLegalperson,jdbcType=VARCHAR},
+      CASEINFO_LINKMAN = #{caseinfoLinkman,jdbcType=VARCHAR},
+      CASEINFO_LINKMANNO = #{caseinfoLinkmanno,jdbcType=VARCHAR},
+      CASEINFO_MOBILE = #{caseinfoMobile,jdbcType=VARCHAR},
+      CASEINFO_EMAIL = #{caseinfoEmail,jdbcType=VARCHAR},
+      CASEINFO_SAVETIME = #{caseinfoSavetime,jdbcType=TIMESTAMP},
+      CASEINFO_SUBMITTIME = #{caseinfoSubmittime,jdbcType=TIMESTAMP},
+      APPELLATE_TIME = #{appellateTime,jdbcType=TIMESTAMP},
+      CASEINFO_ENDTIME = #{caseinfoEndtime,jdbcType=TIMESTAMP},
+      CASEINFO_TIMELIMIT = #{caseinfoTimelimit,jdbcType=NUMERIC},
+      CASEINFO_ESTIMATETIME = #{caseinfoEstimatetime,jdbcType=TIMESTAMP},
+      CASEINFO_FEEDBACK = #{caseinfoFeedback,jdbcType=VARCHAR},
+      CASEINFO_COSTTOLMONEY = #{caseinfoCosttolmoney,jdbcType=NUMERIC},
+      CASEINFO_STATE = #{caseinfoState,jdbcType=NUMERIC},
+      CASEINFO_ENDTYPE = #{caseinfoEndtype,jdbcType=NUMERIC},
+      CASEINFO_STOPTIME = #{caseinfoStoptime,jdbcType=NUMERIC},
+      CASEINFO_FROM = #{caseinfoFrom,jdbcType=NUMERIC},
+      CASEINFO_RESULTTYPE = #{caseinfoResulttype,jdbcType=NUMERIC},
+      DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      UNIT_ID = #{unitId,jdbcType=VARCHAR},
+      UNIT_NAME = #{unitName,jdbcType=VARCHAR},
+      CASEINFO_AREACODE = #{caseinfoAreacode,jdbcType=VARCHAR},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      UPDATER = #{updater,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where CASEINFO_ID = #{caseinfoId,jdbcType=VARCHAR}
+  </update>
+</mapper>

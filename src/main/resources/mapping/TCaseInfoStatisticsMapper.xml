@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.TCaseInfoStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.css.cloud.quartz.zhjc.jsq.entity.TCaseInfoStatistics" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CASEINFO_TOTAL" property="caseinfoTotal" jdbcType="NUMERIC" />
+    <result column="CASEINFO_ACCEPT" property="caseinfoAccept" jdbcType="NUMERIC" />
+    <result column="CASEINFO_FINAL" property="caseinfoFinal" jdbcType="NUMERIC" />
+    <result column="CASEINFO_NETSAVE" property="caseinfoNetsave" jdbcType="NUMERIC" />
+    <result column="CASEINFO_NETACCEPT" property="caseinfoNetaccept" jdbcType="NUMERIC" />
+    <result column="CASEINFO_NETFINAL" property="caseinfoNetfinal" jdbcType="NUMERIC" />
+    <result column="CASEINFO_FRONTSAVE" property="caseinfoFrontsave" jdbcType="NUMERIC" />
+    <result column="CASEINFO_FRONT" property="caseinfoFront" jdbcType="NUMERIC" />
+    <result column="CASEINFO_FRONTFINAL" property="caseinfoFrontfinal" jdbcType="NUMERIC" />
+    <result column="CASEINFO_POST" property="caseinfoPost" jdbcType="NUMERIC" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="CASEINFO_ONLINE" property="caseinfoOnline" jdbcType="NUMERIC" />
+    <result column="CASEINFO_ONCE" property="caseinfoOnce" jdbcType="NUMERIC" />
+    <result column="CASEINFO_ALL" property="caseinfoAll" jdbcType="NUMERIC" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CASEINFO_TOTAL, CASEINFO_ACCEPT, CASEINFO_FINAL, CASEINFO_NETSAVE, CASEINFO_NETACCEPT, 
+    CASEINFO_NETFINAL, CASEINFO_FRONTSAVE, CASEINFO_FRONT, CASEINFO_FRONTFINAL, CASEINFO_POST, 
+    UPDATETIME, CASEINFO_ONLINE, CASEINFO_ONCE, CASEINFO_ALL
+  </sql>
+  <select id="selectByDate"  resultType="long">
+    select count(1)  from CASEINFO_STATISTICS where to_char(UPDATETIME,'yyyyMMdd') = #{date}
+  </select>
+  <update id="updateByDate" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TCaseInfoStatistics">
+    update CASEINFO_STATISTICS
+    set CASEINFO_TOTAL = #{caseinfoTotal,jdbcType=NUMERIC},
+      CASEINFO_ACCEPT = #{caseinfoAccept,jdbcType=NUMERIC},
+      CASEINFO_FINAL = #{caseinfoFinal,jdbcType=NUMERIC},
+      CASEINFO_NETSAVE = #{caseinfoNetsave,jdbcType=NUMERIC},
+      CASEINFO_NETACCEPT = #{caseinfoNetaccept,jdbcType=NUMERIC},
+      CASEINFO_NETFINAL = #{caseinfoNetfinal,jdbcType=NUMERIC},
+      CASEINFO_FRONTSAVE = #{caseinfoFrontsave,jdbcType=NUMERIC},
+      CASEINFO_FRONT = #{caseinfoFront,jdbcType=NUMERIC},
+      CASEINFO_FRONTFINAL = #{caseinfoFrontfinal,jdbcType=NUMERIC},
+      CASEINFO_POST = #{caseinfoPost,jdbcType=NUMERIC},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      CASEINFO_ONLINE = #{caseinfoOnline,jdbcType=NUMERIC},
+      CASEINFO_ONCE = #{caseinfoOnce,jdbcType=NUMERIC},
+      CASEINFO_ALL = #{caseinfoAll,jdbcType=NUMERIC}
+    where to_char(UPDATETIME,'yyyy-MM-dd') =to_char(#{updatetime,jdbcType=TIMESTAMP},'yyyy-MM-dd')
+  </update>
+  <select id="getDataByDate" resultMap="BaseResultMap" >
+    select *  from
+    (select
+    <include refid="Base_Column_List" />
+    from CASEINFO_STATISTICS
+    where to_char(UPDATETIME,'yyyy-MM-dd') =to_char(#{date,jdbcType=TIMESTAMP},'yyyy-MM-dd')
+    order by UPDATETIME DESC)
+    WHERE  rownum=1
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from CASEINFO_STATISTICS
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from CASEINFO_STATISTICS
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TCaseInfoStatistics" >
+    insert into CASEINFO_STATISTICS (ID, CASEINFO_TOTAL, CASEINFO_ACCEPT, 
+      CASEINFO_FINAL, CASEINFO_NETSAVE, CASEINFO_NETACCEPT, 
+      CASEINFO_NETFINAL, CASEINFO_FRONTSAVE, CASEINFO_FRONT, 
+      CASEINFO_FRONTFINAL, CASEINFO_POST, UPDATETIME, 
+      CASEINFO_ONLINE, CASEINFO_ONCE, CASEINFO_ALL
+      )
+    values (#{id,jdbcType=VARCHAR}, #{caseinfoTotal,jdbcType=NUMERIC}, #{caseinfoAccept,jdbcType=NUMERIC}, 
+      #{caseinfoFinal,jdbcType=NUMERIC}, #{caseinfoNetsave,jdbcType=NUMERIC}, #{caseinfoNetaccept,jdbcType=NUMERIC}, 
+      #{caseinfoNetfinal,jdbcType=NUMERIC}, #{caseinfoFrontsave,jdbcType=NUMERIC}, #{caseinfoFront,jdbcType=NUMERIC}, 
+      #{caseinfoFrontfinal,jdbcType=NUMERIC}, #{caseinfoPost,jdbcType=NUMERIC}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{caseinfoOnline,jdbcType=NUMERIC}, #{caseinfoOnce,jdbcType=NUMERIC}, #{caseinfoAll,jdbcType=NUMERIC}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TCaseInfoStatistics" >
+    insert into CASEINFO_STATISTICS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="caseinfoTotal != null" >
+        CASEINFO_TOTAL,
+      </if>
+      <if test="caseinfoAccept != null" >
+        CASEINFO_ACCEPT,
+      </if>
+      <if test="caseinfoFinal != null" >
+        CASEINFO_FINAL,
+      </if>
+      <if test="caseinfoNetsave != null" >
+        CASEINFO_NETSAVE,
+      </if>
+      <if test="caseinfoNetaccept != null" >
+        CASEINFO_NETACCEPT,
+      </if>
+      <if test="caseinfoNetfinal != null" >
+        CASEINFO_NETFINAL,
+      </if>
+      <if test="caseinfoFrontsave != null" >
+        CASEINFO_FRONTSAVE,
+      </if>
+      <if test="caseinfoFront != null" >
+        CASEINFO_FRONT,
+      </if>
+      <if test="caseinfoFrontfinal != null" >
+        CASEINFO_FRONTFINAL,
+      </if>
+      <if test="caseinfoPost != null" >
+        CASEINFO_POST,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+      <if test="caseinfoOnline != null" >
+        CASEINFO_ONLINE,
+      </if>
+      <if test="caseinfoOnce != null" >
+        CASEINFO_ONCE,
+      </if>
+      <if test="caseinfoAll != null" >
+        CASEINFO_ALL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="caseinfoTotal != null" >
+        #{caseinfoTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoAccept != null" >
+        #{caseinfoAccept,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFinal != null" >
+        #{caseinfoFinal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoNetsave != null" >
+        #{caseinfoNetsave,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoNetaccept != null" >
+        #{caseinfoNetaccept,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoNetfinal != null" >
+        #{caseinfoNetfinal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFrontsave != null" >
+        #{caseinfoFrontsave,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFront != null" >
+        #{caseinfoFront,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFrontfinal != null" >
+        #{caseinfoFrontfinal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoPost != null" >
+        #{caseinfoPost,jdbcType=NUMERIC},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoOnline != null" >
+        #{caseinfoOnline,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoOnce != null" >
+        #{caseinfoOnce,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoAll != null" >
+        #{caseinfoAll,jdbcType=NUMERIC},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TCaseInfoStatistics" >
+    update CASEINFO_STATISTICS
+    <set >
+      <if test="caseinfoTotal != null" >
+        CASEINFO_TOTAL = #{caseinfoTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoAccept != null" >
+        CASEINFO_ACCEPT = #{caseinfoAccept,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFinal != null" >
+        CASEINFO_FINAL = #{caseinfoFinal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoNetsave != null" >
+        CASEINFO_NETSAVE = #{caseinfoNetsave,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoNetaccept != null" >
+        CASEINFO_NETACCEPT = #{caseinfoNetaccept,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoNetfinal != null" >
+        CASEINFO_NETFINAL = #{caseinfoNetfinal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFrontsave != null" >
+        CASEINFO_FRONTSAVE = #{caseinfoFrontsave,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFront != null" >
+        CASEINFO_FRONT = #{caseinfoFront,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoFrontfinal != null" >
+        CASEINFO_FRONTFINAL = #{caseinfoFrontfinal,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoPost != null" >
+        CASEINFO_POST = #{caseinfoPost,jdbcType=NUMERIC},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseinfoOnline != null" >
+        CASEINFO_ONLINE = #{caseinfoOnline,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoOnce != null" >
+        CASEINFO_ONCE = #{caseinfoOnce,jdbcType=NUMERIC},
+      </if>
+      <if test="caseinfoAll != null" >
+        CASEINFO_ALL = #{caseinfoAll,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TCaseInfoStatistics" >
+    update CASEINFO_STATISTICS
+    set CASEINFO_TOTAL = #{caseinfoTotal,jdbcType=NUMERIC},
+      CASEINFO_ACCEPT = #{caseinfoAccept,jdbcType=NUMERIC},
+      CASEINFO_FINAL = #{caseinfoFinal,jdbcType=NUMERIC},
+      CASEINFO_NETSAVE = #{caseinfoNetsave,jdbcType=NUMERIC},
+      CASEINFO_NETACCEPT = #{caseinfoNetaccept,jdbcType=NUMERIC},
+      CASEINFO_NETFINAL = #{caseinfoNetfinal,jdbcType=NUMERIC},
+      CASEINFO_FRONTSAVE = #{caseinfoFrontsave,jdbcType=NUMERIC},
+      CASEINFO_FRONT = #{caseinfoFront,jdbcType=NUMERIC},
+      CASEINFO_FRONTFINAL = #{caseinfoFrontfinal,jdbcType=NUMERIC},
+      CASEINFO_POST = #{caseinfoPost,jdbcType=NUMERIC},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      CASEINFO_ONLINE = #{caseinfoOnline,jdbcType=NUMERIC},
+      CASEINFO_ONCE = #{caseinfoOnce,jdbcType=NUMERIC},
+      CASEINFO_ALL = #{caseinfoAll,jdbcType=NUMERIC}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.css.cloud.quartz.zhjc.jsq.dao.TBaseStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.css.cloud.quartz.zhjc.jsq.entity.TBaseStatistics" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="UPDATE_COUNT" property="updateCount" jdbcType="NUMERIC" />
+    <result column="TOTAL_CONT" property="totalCont" jdbcType="NUMERIC" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, DATA_TYPE, UPDATE_COUNT, TOTAL_CONT, UPDATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from BASE_STATISTICS
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from BASE_STATISTICS
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+
+
+  <insert id="insertAll">
+    insert into BASE_STATISTICS (ID, DATA_TYPE, UPDATE_COUNT,
+      TOTAL_CONT, UPDATETIME)
+    <foreach collection="list" item="item"  index="index" separator="UNION ALL">
+      select #{item.id}, #{item.dataType},#{item.updateCount},#{item.totalCont},#{item.updatetime} from dual
+    </foreach>
+  </insert>
+  <insert id="insert" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TBaseStatistics" >
+    insert into BASE_STATISTICS (ID, DATA_TYPE, UPDATE_COUNT, 
+      TOTAL_CONT, UPDATETIME)
+    values (#{id,jdbcType=VARCHAR}, #{dataType,jdbcType=VARCHAR}, #{updateCount,jdbcType=NUMERIC}, 
+      #{totalCont,jdbcType=NUMERIC}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TBaseStatistics" >
+    insert into BASE_STATISTICS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="dataType != null" >
+        DATA_TYPE,
+      </if>
+      <if test="updateCount != null" >
+        UPDATE_COUNT,
+      </if>
+      <if test="totalCont != null" >
+        TOTAL_CONT,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="updateCount != null" >
+        #{updateCount,jdbcType=NUMERIC},
+      </if>
+      <if test="totalCont != null" >
+        #{totalCont,jdbcType=NUMERIC},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TBaseStatistics" >
+    update BASE_STATISTICS
+    <set >
+      <if test="dataType != null" >
+        DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="updateCount != null" >
+        UPDATE_COUNT = #{updateCount,jdbcType=NUMERIC},
+      </if>
+      <if test="totalCont != null" >
+        TOTAL_CONT = #{totalCont,jdbcType=NUMERIC},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.css.cloud.quartz.zhjc.jsq.entity.TBaseStatistics" >
+    update BASE_STATISTICS
+    set DATA_TYPE = #{dataType,jdbcType=VARCHAR},
+      UPDATE_COUNT = #{updateCount,jdbcType=NUMERIC},
+      TOTAL_CONT = #{totalCont,jdbcType=NUMERIC},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
